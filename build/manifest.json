@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Toggle Page Elements",
+  "version": "0.1",
+  "description": "Allows user to toggle elements on and \n
+    off by selecting them. Great for hiding annoying \n
+    elements like sidebars on poorly designed sites. \n
+    I made this to toggle the Reddit sidebar because \n
+    it takes too much of the screen when I have it open \n
+    with another program on my small laptop screen. ",
+  "icons":  { "16": "./icons/icon.png"},
+  "background": ["./main.js"],
+  "browser_action": {
+   "default_icon": "./icons/icon.png",
+   "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "all_frames": true,
+      "js": ["bundle.js"]
+    }
+  ],
+  "permissions": [
+    "activeTab"
+  ]
+}
