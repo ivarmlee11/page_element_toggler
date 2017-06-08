@@ -1,8 +1,19 @@
 body {
-  margin: 0;
-  padding: 0;
 }
 
 .red {
   background-color: rgb(255, 0, 0);
+}
+
+.green {
+  background-color: rgb(0, 255, 0);
+}
+
+.white {
+  background-color: rgb(255, 255, 255);
+}
+
+.message-bubble {
+  border-radius: 10px;
+  padding: 10px;
 }

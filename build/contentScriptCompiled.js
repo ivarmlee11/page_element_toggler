@@ -73,22 +73,44 @@
 "use strict";
 
 
-console.log('Element toggler loaded via Google Chrome Extensions :D');
+console.log('Element toggler loaded via Google Chrome Extensions ........ :D');
+var eraserOn = false;
 
-document.body.addEventListener('click', function (event) {
-  // highlight the mouseenter target
-  var oldBgColor = event.target.style.backgroundColor;
+document.body.addEventListener('click', function (e) {
 
-  // console.log(`old bg color ${oldBgColor}`);
+  if (eraserOn) {
+    var chosenElement = e.target;
+    chosenElement.style.backgroundColor = 'red';
 
-  event.target.style.backgroundColor = "red";
+    setTimeout(function () {
+      chosenElement.style.display = 'none';
+    }, 1000);
+  }
+});
 
-  // reset the color after a short delay
-  setTimeout(function () {
-    event.target.style.backgroundColor = oldBgColor;
-  }, 1000);
+chrome.runtime.onMessage.addListener(function (req, sender, sendResponse) {
+  console.log(req.data);
+  var currentUrl = window.location.href;
+  switch (req.data) {
+    case 'reset page':
+      sendResponse({ data: currentUrl });
+      window.location.reload();
+      break;
+    case true:
+      eraserOn = true;
+      sendResponse({ data: 'eraser has been toggled on!' });
+      break;
+    case false:
+      eraserOn = false;
+      sendResponse({ data: 'eraser has been toggled off!' });
+      break;
+    case 'get current page':
+      sendResponse({ data: currentUrl });
+      break;
+    default:
+  }
 });
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=bundle.js.map
+//# sourceMappingURL=contentScriptCompiled.js.map

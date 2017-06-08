@@ -4,8 +4,8 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "del": "rm ./build/bundle.js ./build/bundle.js.map ./build/popupCompiled.js ./build/popupCompiled.js.map",
-    "start": "node_modules/.bin/webpack && node_modules/.bin/webpack --config ./popup.config.js && webpack-dev-server",
+    "del": "rm ./build/contentScriptCompiled.js ./build/contentScriptCompiled.js.map ./build/popupCompiled.js ./build/popupCompiled.js.map",
+    "start": "node_modules/.bin/webpack --config ./webpack.config.js && node_modules/.bin/webpack --config ./popup.config.js && webpack-dev-server --watch",
     "build": "npm run del && npm run start"
   },
   "dependencies": {},

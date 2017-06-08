@@ -9,19 +9,20 @@
     it takes too much of the screen when I have it open \n
     with another program on my small laptop screen. ",
   "icons":  { "16": "./icons/icon.png"},
-  "background": ["./main.js"],
   "browser_action": {
-   "default_icon": "./icons/icon.png",
-   "default_popup": "popup.html"
+    "default_icon": "./icons/icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Toggle Page Elements Extension"
   },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
       "all_frames": true,
-      "js": ["bundle.js"]
+      "js": ["contentScriptCompiled.js"]
     }
   ],
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage"
   ]
 }

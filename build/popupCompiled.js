@@ -73,34 +73,98 @@
 "use strict";
 
 
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM fully loaded and parsed");
-  var toggleContentScriptButton = document.getElementById('toggleContentScript');
-  var flag = true;
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-  toggleContentScriptButton.addEventListener('click', function (e) {
-    e.preventDefault();
-    console.log("button pressed when the value of flag was " + flag);
+document.addEventListener('DOMContentLoaded', function () {
 
-    if (flag) {
-      flag = false;
-      toggleContentScriptButton.innerHTML = 'Turn On Extension';
-    } else {
-      flag = true;
-      toggleContentScriptButton.innerHTML = 'Turn Off Extension';
-    }
-  });
+  var onOffButton = document.getElementById('toggleContentScript');
+  var resetButton = document.getElementById('reset');
+  var message = document.getElementById('message');
+
+  var url = void 0;
+  var eraserState = void 0;
 
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, { data: toggleContenScript }, function (response) {
-      console.log("\n        succ-----------------------ess\n        asdkasfaljsfaskjfnasjfasf\n        asdjasfjkabsfjabsf\n        asjkbdaskjbfasjkf\n      ");
+    chrome.tabs.sendMessage(tabs[0].id, { data: 'get current page' }, function (res) {
+      url = res.data;
+      checkStorageForEraserState(url).then(function (eraser) {
+        eraserState = eraser;
+        toggleEraserAndSaveSettings(eraserState);
+        changeViewBasedOnEraserState(eraserState, onOffButton, resetButton, message);
+      });
     });
+  });
+
+  onOffButton.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    eraserState = !eraserState;
+
+    changeViewBasedOnEraserState(eraserState, onOffButton, resetButton, message);
+
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { data: 'get current page' }, function (res) {
+        console.log(res.data + ' response from get current page');
+        toggleEraserAndSaveSettings(eraserState, res.data);
+      });
+    });
+  });
+
+  resetButton.addEventListener('click', function (e) {
+    e.preventDefault();
+    resetPage();
+    changeViewBasedOnEraserState(false, onOffButton, resetButton, message);
   });
 });
 
-var toggleContenScript = function toggleContenScript(booleanValueToChange) {
-  booleanValueToChange = !booleanValueToChange;
-  return booleanValueToChange;
+function toggleEraserAndSaveSettings(eraserState, currentDomain) {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, { data: eraserState }, function (res) {
+      console.log(res.data);
+    });
+  });
+
+  if (currentDomain) {
+    var key = currentDomain;
+    var dataObj = {};
+    dataObj[key] = eraserState;
+
+    console.log('data object to be saved');
+    console.log(dataObj);
+
+    chrome.storage.sync.set(_defineProperty({}, key, dataObj[key]), function () {
+      console.log('current domain url <' + currentDomain + '>\n           eraser status <' + eraserState + '> saved.');
+    });
+  }
+};
+
+function checkStorageForEraserState(url) {
+  return new Promise(function (resolve, reject) {
+    var eraserState = false;
+    var domainName = url;
+    chrome.storage.sync.get(null, function (urlData) {
+      if (urlData[domainName]) {
+        eraserState = urlData[domainName];
+      }
+      resolve(eraserState);
+    });
+  });
+};
+
+function resetPage() {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, { data: 'reset page' }, function (res) {
+      var url = res.data;
+      chrome.storage.sync.remove([url], function () {});
+    });
+  });
+};
+
+function changeViewBasedOnEraserState(eraserState, onOffButton, resetButton, message) {
+
+  eraserState ? onOffButton.innerHTML = 'Stop Erasing' : onOffButton.innerHTML = 'Start Erasing';
+  eraserState ? document.body.className = 'red' : document.body.className = 'green';
+  eraserState ? message.innerHTML = 'Press "Stop Erasing" to stop erasing page elements on mouse clicks.' : message.innerHTML = 'Press "Start Erasing" to start erasing page elements on mouse clicks.';
 };
 
 /***/ })
