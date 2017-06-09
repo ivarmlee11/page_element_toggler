@@ -6,17 +6,15 @@
 
 1. Clone this repository or download the zip file.
 
-2. Find the location of the download and move into the root of the folder.  You may need to unzip it first.
+2. Open Chrome.
 
-3. Open Chrome.
+3. Type chrome://extensions in the URL bar.
 
-4. Type chrome://extensions in the URL bar.
+4. Toggle Developer Mode.
 
-5. Toggle Developer Mode.
+5. Click 'Load unpacked extension'~
 
-6. Click 'Load unpacked extension'
+6. Select the extension folder you downloaded/cloned and navigate to the /build folder.
 
-7. Select the extension folder. Double click the "/build" folder.
-
-8. Close and open the browser and look for the eraser icon next to your other extensions!
+7. The extension should load!
 
