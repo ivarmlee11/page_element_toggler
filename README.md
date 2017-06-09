@@ -6,7 +6,7 @@
 
 1. Clone this repository or download the zip file.
 
-2. Find the location of the download and move into the root of the folder.
+2. Find the location of the download and move into the root of the folder.  You may need to unzip it first.
 
 3. Open Chrome.
 
@@ -16,7 +16,7 @@
 
 6. Click 'Load unpacked extension'
 
-7. Select the extension folder.
+7. Select the extension folder. Double click the "/build" folder.
 
 8. Close and open the browser and look for the eraser icon next to your other extensions!
 
